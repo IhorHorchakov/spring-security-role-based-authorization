@@ -1,0 +1,19 @@
+version: '3'
+services:
+
+  spring-security-role-based-authorization:
+    container_name: authorization-server
+    image: authorization-server
+    ports:
+      - "8080:8080"
+      - "9251:9251"
+    environment:
+      - DEBUG_PORT=9251
+    build:
+      context: authorization-server
+    networks:
+      - application-network
+
+networks:
+  application-network:
+      driver: bridge
