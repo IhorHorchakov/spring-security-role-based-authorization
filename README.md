@@ -34,6 +34,7 @@ if the authentication system finds that all the attributes defined in the policy
 ### Spring Security: Using RBAC authorization
 
 
+
 -------
 Useful links:
 https://frontegg.com/blog/authentication-vs-authorization
