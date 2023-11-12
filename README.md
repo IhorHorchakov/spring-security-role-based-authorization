@@ -37,15 +37,21 @@ permission 'CAN_VIEW', and 'ROLE_MANAGER' that has permissions 'CAN_VIEW', 'CAN_
 This approach is much better suited to be used in applications because it enables developers to configure **granular**
 access control. We can mix and match roles and permissions as granular as necessary.
 
+##### AuthorizeHttpRequestsConfigurer
 Spring Framework uses the approach of _configurers_ - an ability to expand Spring configuration by adding custom components. 
 `AuthorizeHttpRequestsConfigurer` enables authorization feature in application by adding `AuthorizationFilter` to the filter
 chain : 
 
 ![](https://github.com/IhorHorchakov/spring-security-role-based-authorization/blob/master/img/filter-chain.png?raw=true)
 
-`AuthorizationFilter` is the entry point of authorization process for the HTTP request. This filter utilizes AuthorizationManager to delegate 
-verification process and relies on its result. AuthorizationManager has many implementation to verify the authority in various 
-ways: RequestMatcherDelegatingAuthorizationManager, AuthenticatedAuthorizationManager, DeferringObservationAuthorizationManager, PreAuthorizeAuthorizationManager.
+`AuthorizeHttpRequestsConfigurer` is getting created by using _.authorizeHttpRequests()_ method in SecurityConfig.
+
+##### AuthorizationManager
+`AuthorizationFilter` is the entry point of authorization process for the HTTP requests. This filter utilizes _AuthorizationManager_ to delegate 
+verification process and relies on its decision. _AuthorizationManager_ has many implementations to verify the authority
+in a various ways: RequestMatcherDelegatingAuthorizationManager, AuthenticatedAuthorizationManager, DeferringObservationAuthorizationManager, PreAuthorizeAuthorizationManager.
+
+![](https://github.com/IhorHorchakov/spring-security-role-based-authorization/blob/master/img/authentication-manager.png?raw=true)
 
 
 -------
