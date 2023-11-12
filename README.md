@@ -53,11 +53,26 @@ in a various ways: RequestMatcherDelegatingAuthorizationManager, AuthenticatedAu
 
 ![](https://github.com/IhorHorchakov/spring-security-role-based-authorization/blob/master/img/authentication-manager.png?raw=true)
 
+##### Method security
+Spring Security supports authorization semantics at the method level. We could secure our web layer and service layer by
+restricting which roles are able to execute a particular method — and test it using dedicated method-level security test support.
 
--------
-Draft section
+To enable method security we use `@EnableGlobalMethodSecurity` annotation. This annotation has properties we could override:
+- _prePostEnabled_ property enables Spring Security pre/post annotations
+- _securedEnabled_ property determines if the @Secured annotation should be enabled
+- _jsr250Enabled_ property allows us to use the @RoleAllowed annotation
 
-SecurityExpressionOperations
+In this project we use `@PreAuthorized` annotation to check user authorities. Both `@PreAuthorize` and `@PostAuthorize` 
+annotations provide expression-based access control. So, predicates can be written using SpEL (Spring Expression Language).
+The `@PreAuthorize` annotation checks the given expression before entering the method, whereas the `@PostAuthorize` annotation
+verifies it after the execution of the method and could check the returned result as well.
+
+All the possible built-In expressions to check access control are [listed here](https://docs.spring.io/spring-security/site/docs/4.1.x/reference/html/el-access.html).
+SpEL provides is a flexible way to check the access control - we can do referring to beans and even check path variables.
+
+`PreAuthorizeAuthorizationManager` runs the SpEL to verify an expression in @PreAuthorize when the target method is matched
+and going to execute. This manager returns ExpressionAuthorizationDecision back to AuthorizationFilter, so we could debug
+it if there is a need to check how @PreAuthorize works.
 
 -------
 Useful links:
