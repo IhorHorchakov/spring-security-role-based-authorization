@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static com.example.security.Role.*;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
@@ -24,14 +25,25 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User.withUsername("manager").password(passwordEncoder().encode("managerpass")).authorities("ROLE_MANAGER").build());
-        manager.createUser(User.withUsername("user").password(passwordEncoder().encode("userpass")).authorities("ROLE_USER").build());
+        manager.createUser(User
+                .withUsername("manager")
+                .password(passwordEncoder().encode("managerpass"))
+                .authorities(ROLE_MANAGER.getGranularAuthorities())
+                .build()
+        );
+        manager.createUser(User
+                .withUsername("user")
+                .password(passwordEncoder().encode("userpass"))
+                .authorities(ROLE_USER.getGranularAuthorities())
+                .build()
+        );
         return manager;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf().disable()
                 .authorizeHttpRequests().requestMatchers("/home").permitAll()
                 .anyRequest().authenticated()
                 .and()

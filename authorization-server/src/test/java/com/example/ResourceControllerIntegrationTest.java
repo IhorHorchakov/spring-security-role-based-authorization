@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -103,6 +105,35 @@ public class ResourceControllerIntegrationTest {
                 .andExpect(content().string("Dear 'manager', you have been authorized and got 'Manager' resource"));
     }
 
+    // Testing the 'DELETE /resource' endpoint
+    @Test
+    void deleteResource_returns401_unauthorizedResponse_ifUnauthenticated() throws Exception {
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.delete("/resource"))
+                .andDo(print())
+                .andExpect(status().isUnauthorized())
+                .andExpect(header().string("WWW-Authenticate", "Basic realm=\"Realm\""));
+    }
+
+    @Test
+    void deleteResource_returns401_ForbiddenResponse_ifAuthorizedAsUser() throws Exception {
+        this.mockMvc
+                .perform(MockMvcRequestBuilders.delete("/resource").header(AUTH_HEADER, getUserAuthHeader()))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void deleteResource_returns200_OkResponse_ifAuthorizedAsManager() throws Exception {
+        this.mockMvc
+                .perform(delete("/resource").header(AUTH_HEADER, getManagerAuthHeader()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("Dear 'manager', you have deleted the resource"));
+    }
+
+
+    // Utility methods
     private String getUserAuthHeader() {
         String credentials = "user:userpass";
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes(StandardCharsets.UTF_8));
