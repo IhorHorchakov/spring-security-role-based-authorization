@@ -68,7 +68,7 @@ The `@PreAuthorize` annotation checks the given expression before entering the m
 verifies it after the execution of the method and could check the returned result as well.
 
 All the possible built-In expressions to check access control are [listed here](https://docs.spring.io/spring-security/site/docs/4.1.x/reference/html/el-access.html).
-SpEL provides is a flexible way to check the access control - we can do referring to beans and even check path variables.
+SpEL provides a flexible way to check the access control - we can do referring to beans and even check path variables.
 
 `PreAuthorizeAuthorizationManager` runs the SpEL to verify an expression in @PreAuthorize when the target method is matched
 and going to execute. This manager returns ExpressionAuthorizationDecision back to AuthorizationFilter, so we could debug
