@@ -51,7 +51,7 @@ chain :
 verification process and relies on its decision. _AuthorizationManager_ has many implementations to verify the authority
 in a various ways: RequestMatcherDelegatingAuthorizationManager, AuthenticatedAuthorizationManager, DeferringObservationAuthorizationManager, PreAuthorizeAuthorizationManager.
 
-![](https://github.com/IhorHorchakov/spring-security-role-based-authorization/blob/master/img/authentication-manager.png?raw=true)
+![](https://github.com/IhorHorchakov/spring-security-role-based-authorization/blob/master/img/authorization-manager.png?raw=true)
 
 ##### Method security
 Spring Security supports authorization semantics at the method level. We could secure our web layer and service layer by
